@@ -4,10 +4,38 @@ import { map, tap } from "rxjs/operators";
 
 import { RecipeService } from "../recipes/recipe.service";
 import { Recipe } from "../recipes/recipe.model";
+import { ShoppingListService } from "../shopping-list/shopping-list.service";
+import { Ingredient } from "../shared/ingredient.model";
 
 @Injectable({ providedIn: "root" })
 export class DataStorageService {
-  constructor(private http: HttpClient, private recipeService: RecipeService) {}
+  constructor(
+    private http: HttpClient,
+    private recipeService: RecipeService,
+    private shoppingListService: ShoppingListService
+  ) {}
+
+  storeShoppingList() {
+    const shoppingList = this.shoppingListService.getIngredients();
+    this.http
+      .put("https://shoprecipes.firebaseio.com/shoppingList.json", shoppingList)
+      .subscribe(response => console.log(response));
+  }
+
+  fetchShoppingList() {
+    return this.http
+      .get<Ingredient[]>("https://shoprecipes.firebaseio.com/shoppingList.json")
+      .pipe(
+        map(shoppingList => {
+          return shoppingList.map(shoppingListItem => {
+            return shoppingListItem;
+          });
+        }),
+        tap(shoppingList => {
+          this.shoppingListService.setIngredients(shoppingList);
+        })
+      );
+  }
 
   storeRecipes() {
     const recipes = this.recipeService.getRecipes();

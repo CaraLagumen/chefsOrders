@@ -65,6 +65,7 @@ export class AuthComponent implements OnDestroy {
       resData => {
         console.log(resData);
         this.dataStorageService.fetchRecipes().subscribe();
+        this.dataStorageService.fetchShoppingList().subscribe();
         this.isLoading = false;
         this.router.navigate(["/recipes"]);
       },
