@@ -1,0 +1,24 @@
+<div
+  class="row mt-xl-5"
+  style="margin-top: 10vh; margin-bottom: 10vh;"
+>
+  <div class="col-md-6">
+    <app-shopping-edit></app-shopping-edit>
+    <!-- NOT NECESSARY
+      <app-shopping-edit
+      (ingredientAdded)="onIngredientAdded($event)"
+    ></app-shopping-edit> -->
+    <hr>
+
+  </div>
+  <div class="col-md-6">
+    <ul class="list-group">
+      <a
+        class="list-group-item"
+        style="cursor: pointer"
+        *ngFor="let ingredient of ingredients; let i = index"
+        (click)="onEditItem(i)"
+      >{{ ingredient.name }} ({{ ingredient.amount }})</a>
+    </ul>
+  </div>
+</div>
